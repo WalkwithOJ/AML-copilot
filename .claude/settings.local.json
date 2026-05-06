@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:/Users/jsemo/OneDrive/Desktop/aml-copilot/src\")",
+      "Bash(mkdir -p \"C:/Users/jsemo/OneDrive/Desktop/aml-copilot/tests\")",
+      "Bash(mkdir -p \"C:/Users/jsemo/OneDrive/Desktop/aml-copilot/scripts\")",
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\jsemo\\\\OneDrive\\\\Desktop\\\\aml-copilot\" -Name | Where-Object { $_ -match \"\\\\.py$\" })",
+      "Bash(mkdir -p /c/Users/jsemo/OneDrive/Desktop/aml-copilot/src/clients)",
+      "Bash(touch /c/Users/jsemo/OneDrive/Desktop/aml-copilot/src/clients/__init__.py)",
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\jsemo\\\\OneDrive\\\\Desktop\\\\aml-copilot\" | Where-Object { !$_.PSIsContainer } | ForEach-Object { \"$\\($_.FullName\\) [$\\([math]::Round\\($_.Length/1KB, 1\\)\\)KB] $\\($_.LastWriteTime\\)\" })"
+    ]
+  }
+}
