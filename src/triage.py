@@ -1,8 +1,8 @@
 """Main orchestrator: 12-step AML triage pipeline."""
-import os
 from dataclasses import dataclass
 
 from src.audit import log_step
+from src.clients import get_llm_client
 from src.models import TriageBrief
 from src.redaction import redact, rehydrate
 from src.retrieval import embed, find_similar_cases, get_entity_history, search_regulations
@@ -87,15 +87,6 @@ class TriageResult:
     tokenized_narrative: str
 
 
-def _get_llm_client():
-    """Auto-select Bedrock or direct Anthropic based on env vars."""
-    if os.getenv("BEDROCK_MODEL_ID") and os.getenv("AWS_ACCESS_KEY_ID"):
-        from src.clients.bedrock import BedrockClient
-        return BedrockClient()
-    from src.clients.anthropic_direct import AnthropicDirectClient
-    return AnthropicDirectClient()
-
-
 def _format_regulations(regs: list[dict]) -> str:
     parts = []
     for r in regs:
@@ -171,7 +162,7 @@ def run_triage(conn, alert_id: int) -> TriageResult:
     )
 
     # Step 9: Call LLM
-    client = _get_llm_client()
+    client = get_llm_client()
     brief = client.triage(SYSTEM_PROMPT, user_prompt)
 
     # Step 10: Log LLM response
