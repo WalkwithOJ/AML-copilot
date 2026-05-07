@@ -9,3 +9,6 @@ env/
 .pytest_cache/
 .DS_Store
 *.log
+.claude/
+docs/superpowers/
+Project-context.md
