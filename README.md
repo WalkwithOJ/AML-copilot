@@ -111,10 +111,10 @@ Raw Alert (with PII: real names, account numbers)
 
 | Layer | Technology | Rationale |
 |---|---|---|
-| LLM | Claude Sonnet 4.6 via **AWS Bedrock** | On-resume; enterprise-grade; data stays in AWS perimeter |
+| LLM | Claude Sonnet 4.6 via **AWS Bedrock** | enterprise-grade; data stays in AWS perimeter |
 | LLM fallback | Anthropic API direct | Activated automatically when Bedrock creds absent |
 | PII redaction | **Microsoft Presidio** + regex | Production-grade named entity recognition; handles PERSON, LOCATION, SSN, CREDIT_CARD, phone, email |
-| Database | **PostgreSQL + pgvector** via Supabase | On-resume; vector similarity search in the same DB as relational data; zero infra overhead |
+| Database | **PostgreSQL + pgvector** via Supabase | vector similarity search in the same DB as relational data; zero infra overhead |
 | Embeddings | `all-MiniLM-L6-v2` (sentence-transformers) | 384-dim, runs locally, fast, free; vectors stored in pgvector |
 | Output validation | **Pydantic v2** | Tool-use schema enforces citations at the schema level — every red flag must cite a source_id |
 | Audit | SHA-256 hash chain | Each step hashes the previous hash + payload; tamper-evident, SR 11-7 aligned |
