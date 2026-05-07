@@ -308,26 +308,6 @@ Distribution: 35 true positives, 15 false positives (70/30), matching the actual
 
 ---
 
-## Key interview talking points
-
-**Q: What problem does this actually solve?**
-
-The production blocker for LLM-assisted AML is not the LLM quality — it's that compliance won't allow raw customer data to leave the bank's systems. This project solves that with a two-boundary architecture: PII stays local (redact → send tokens → rehydrate), and the LLM only ever reasons about opaque identifiers. That design pattern is directly deployable in a regulated institution.
-
-**Q: How is the output trustworthy enough for a compliance team?**
-
-Three layers: (1) Citation enforcement at the Pydantic schema level — a brief without citations literally cannot be constructed. (2) The LLM is given only source-tagged retrieved context and told explicitly that hallucinated regulations are a compliance failure. (3) The full decision trail — inputs, retrieved context, LLM output, analyst disposition — is hash-chained, so any post-hoc modification is detectable. SR 11-7 requires exactly this for AI models used in compliance decisions.
-
-**Q: Why is the human-in-the-loop design important?**
-
-Verafin's product philosophy is analyst augmentation, not replacement. The copilot pre-investigates and drafts — the licensed analyst still makes every final determination before any regulatory action. This matters legally: a SAR filed without analyst review is a compliance failure regardless of how good the AI recommendation was. The "Analyst Disposition" row saves the analyst's accept/edit/reject decision back to Postgres, creating a full accountability chain.
-
-**Q: What would production actually look like?**
-
-Replace Streamlit with a Next.js frontend. Replace Supabase with RDS inside the bank's VPC. Route Bedrock calls through a PrivateLink endpoint so no traffic traverses the public internet. Add a LangGraph agentic loop so the model can request additional KYC lookups rather than working with a fixed retrieval window. Add a ragas eval harness to measure retrieval precision and hallucination rate over time. Regional Bedrock routing (us-east-1 for US alerts, ca-central-1 for Canadian ones) solves data residency requirements.
-
----
-
 ## Roadmap
 
 - [ ] LangGraph agentic orchestrator — model requests follow-up KYC lookups rather than one-shot RAG
