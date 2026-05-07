@@ -177,7 +177,7 @@ Copy `.env.example` to `.env` and fill in:
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_REGION=us-east-1
-BEDROCK_MODEL_ID=us.anthropic.claude-sonnet-4-5-20251001-v2:0
+BEDROCK_MODEL_ID=anthropic.claude-sonnet-4-6
 
 # Supabase Postgres (Transaction Pooler URL from Connect tab)
 DATABASE_URL=postgresql://postgres.xxxx:password@aws-0-us-east-1.pooler.supabase.com:6543/postgres
