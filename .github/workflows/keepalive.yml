@@ -1,0 +1,16 @@
+name: Keep Streamlit Awake
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping AML Copilot
+        run: |
+          curl -sSf -A "keepalive-action/1.0" \
+            "https://aml-copilot.streamlit.app/?keepalive=$(date +%s)" \
+            -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n"
