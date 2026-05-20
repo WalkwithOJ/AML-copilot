@@ -2,6 +2,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
+import psycopg2
 from src.db import get_conn
 from src.triage import run_triage
 from src.audit import verify_chain
@@ -695,7 +696,10 @@ def _conn_cache():
 
 def _conn():
     conn = _conn_cache()
-    if getattr(conn, "closed", 1):
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1")
+    except (psycopg2.OperationalError, psycopg2.InterfaceError):
         _conn_cache.clear()
         conn = _conn_cache()
     return conn
