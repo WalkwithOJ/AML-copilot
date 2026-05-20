@@ -11,14 +11,40 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Ping AML Copilot
-        run: |
-          curl -sS -L --max-time 60 --retry 3 --retry-delay 10 \
-            -A "Mozilla/5.0 (compatible; keepalive-bot/1.0)" \
-            "https://aml-copilot.streamlit.app/?keepalive=$(date +%s)" \
-            -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n"
-
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Playwright
+        run: pip install playwright && playwright install chromium --with-deps
+
+      - name: Wake app with real browser session
+        run: |
+          python - <<'PYEOF'
+          import asyncio
+          from playwright.async_api import async_playwright
+
+          async def main():
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  page = await browser.new_page()
+                  print("Loading app...")
+                  await page.goto("https://aml-copilot.streamlit.app", timeout=90000)
+                  try:
+                      wake = page.get_by_text("Yes, get this app back up!")
+                      await wake.wait_for(timeout=5000)
+                      print("App was sleeping — clicking wake button...")
+                      await wake.click()
+                  except Exception:
+                      print("App already awake.")
+                  await page.wait_for_timeout(20000)
+                  print("Done.")
+                  await browser.close()
+
+          asyncio.run(main())
+          PYEOF
 
       - name: Keep workflow active
         run: |
