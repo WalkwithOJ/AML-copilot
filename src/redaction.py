@@ -3,11 +3,25 @@ import uuid
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 
-ANALYZER = AnalyzerEngine()
-ANONYMIZER = AnonymizerEngine()
+_ANALYZER: AnalyzerEngine | None = None
+_ANONYMIZER: AnonymizerEngine | None = None
 
 ENTITIES = ["PERSON", "LOCATION", "PHONE_NUMBER", "EMAIL_ADDRESS", "US_SSN", "CREDIT_CARD"]
 ACCT_RE = re.compile(r"\b\d{8,12}\b")
+
+
+def _get_analyzer() -> AnalyzerEngine:
+    global _ANALYZER
+    if _ANALYZER is None:
+        _ANALYZER = AnalyzerEngine()
+    return _ANALYZER
+
+
+def _get_anonymizer() -> AnonymizerEngine:
+    global _ANONYMIZER
+    if _ANONYMIZER is None:
+        _ANONYMIZER = AnonymizerEngine()
+    return _ANONYMIZER
 
 
 def redact(text: str) -> tuple[str, dict]:
@@ -20,7 +34,7 @@ def redact(text: str) -> tuple[str, dict]:
         return token
 
     text = ACCT_RE.sub(_replace_acct, text)
-    results = ANALYZER.analyze(text=text, entities=ENTITIES, language="en")
+    results = _get_analyzer().analyze(text=text, entities=ENTITIES, language="en")
 
     # Sort by start position descending to avoid offset drift during replacement
     results_sorted = sorted(results, key=lambda r: r.start, reverse=True)
