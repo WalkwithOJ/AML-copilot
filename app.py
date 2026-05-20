@@ -701,8 +701,9 @@ def _conn():
     return conn
 
 
-def load_alerts(conn):
-    with conn.cursor() as cur:
+@st.cache_data(ttl=60)
+def load_alerts():
+    with _conn().cursor() as cur:
         cur.execute(
             """SELECT a.id, a.typology, a.status, a.created_at,
                       e.name, e.country, a.ground_truth
@@ -757,7 +758,7 @@ components.html(
 )
 
 conn = _conn()
-alerts = load_alerts(conn)
+alerts = load_alerts()
 
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
 with st.sidebar:
