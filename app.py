@@ -1,4 +1,4 @@
-"""AML Copilot — Nasdaq Verafin-branded Streamlit UI."""
+"""AML Copilot — Meridian Sentinel-branded Streamlit UI."""
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
@@ -7,7 +7,7 @@ from src.db import get_conn
 from src.triage import run_triage
 from src.audit import verify_chain
 
-# ─── Favicon: shield with N in Nasdaq blue ───────────────────────────────────
+# ─── Favicon: shield with monogram in brand blue ─────────────────────────────
 FAVICON_SVG = (
     "data:image/svg+xml,"
     "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
@@ -19,7 +19,7 @@ FAVICON_SVG = (
 )
 
 st.set_page_config(
-    page_title="AML Copilot · Nasdaq Verafin",
+    page_title="AML Copilot · Meridian Sentinel",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -462,7 +462,7 @@ body [data-testid="stSelectboxVirtualDropdown"] li[aria-disabled="true"] {
 }
 .page-title { font-size: 1.5rem; font-weight: 700; color: #0A1628; letter-spacing: -0.02em; margin: 0; }
 .page-meta { font-size: 0.8rem; color: #718096; margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; }
-.nasdaq-badge {
+.brand-badge {
   display: flex; align-items: center; gap: 0.45rem;
   background: #F0F9FD; border: 1px solid #BAE6F7;
   border-radius: 6px; padding: 0.35rem 0.7rem;
@@ -775,7 +775,7 @@ with st.sidebar:
         '</div>'
         '<div><div class="sb-brand-name">AML Copilot</div></div>'
         '</div>'
-        '<div class="sb-brand-sub">Nasdaq Verafin · Financial Crime Management</div>'
+        '<div class="sb-brand-sub">Meridian Sentinel · Financial Crime Management</div>'
         '</div>',
         unsafe_allow_html=True,
     )
@@ -848,9 +848,9 @@ st.markdown(
     f'<div class="page-title">AML Triage Brief</div>'
     f'<div class="page-meta">Alert #{alert_id} · {typology_label(typology)} · {ts_str}</div>'
     f'</div>'
-    f'<div class="nasdaq-badge">'
+    f'<div class="brand-badge">'
     f'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0297C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
-    f'NASDAQ VERAFIN'
+    f'MERIDIAN SENTINEL'
     f'</div>'
     f'</div>',
     unsafe_allow_html=True,
