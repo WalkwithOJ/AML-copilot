@@ -261,6 +261,23 @@ AWS Bedrock model access takes 1–5 days to approve after requesting it. Withou
 
 ---
 
+## Design influence
+
+The triage pattern here deliberately follows the "AI peer review" model that [CoLab's AutoReview](https://www.colabsoftware.com/product/autoreview) brings to mechanical engineering: an AI first pass reviews the work against codified standards and prior lessons, surfaces the issues that matter, and leaves the human specialist as the one who signs off. AML Copilot applies the same shape to financial-crime alert triage instead of CAD drawings and 3D models — a different domain, the same underlying idea.
+
+| | CoLab AutoReview — engineering design review | AML Copilot — financial-crime triage |
+|---|---|---|
+| **First pass** | AI reviews 2D drawings / 3D models before the SME review | AI pre-investigates each alert before the analyst opens it |
+| **Checks against** | Design standards, guidelines, lessons learned | Regulations (FinCEN / FATF / FINTRAC), typologies, resolved past cases |
+| **Context first** | Extracts geometry, dimensions, symbols, and metadata so checks run on real engineering context | Retrieves entity history, transactions, and reg excerpts so the model reasons on real case context |
+| **Output** | Annotated errors and non-conformances | Red flags with severity + citations, plus a structured triage brief |
+| **Human stays in control** | Engineer dispositions the findings — the AI doesn't sign off | Analyst accepts / edits / rejects — the copilot augments, never replaces |
+| **Stays governed** | Runs inside CoLab's secure environment; files never leave governed PLM | PII redacted before the model sees it; raw data never leaves the perimeter; every step hash-chained |
+
+The thesis is the same in both: automate the first-pass review so the expert spends their time on judgment, not grunt work — here pointed at a regulated financial workflow rather than a hardware one.
+
+---
+
 ## The 12-step triage pipeline (`src/triage.py`)
 
 | Step | Action | Audit log entry |
